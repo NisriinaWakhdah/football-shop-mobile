@@ -1,6 +1,7 @@
 Nama: Nisriina Wakhdah Haris<br>
 NPM: 2406360445<br>
 Kelas: PBP - B<br>
+Link Repositori: https://github.com/NisriinaWakhdah/football-shop-mobile.git <br>
 
 <details>
 <Summary><b>TUGAS INDIVIDU 7</b></Summary>
