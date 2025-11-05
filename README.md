@@ -103,7 +103,7 @@ c. State and Rebuild (Perubahan tampilan) -> Jika parent atau child mengalami pe
 6. Hot Reload merupakan fitur di Flutter yang dapat memasukkan perubahan kode ke dalam Virtual Machine dengan cepat tanpa harus memulai/menjalankan ulang seluruh aplikasi. Pada Hot Reload, state aplikasi dipertahankan, sehingga kita tidak akan kehilangan data atau memulai ulang aplikasi. Sedangkan Hot Restart adalah fitur yang dapat memasukkan peubahan kode ke dalam VM tetapi memulai ulang seluruh aplikasi, sehingga menghapus state aplikasi dan memulai state dari awal. Berikut ini adalah perbedaan dari Hot Reload dan Hot Restart, yaitu:
     - Kinerja Hot Reload lebih cepat dibandingkan dengan Hot Restart (Hot Restart lebih lambat dibandingkan Hot Reload)
     - Hot Reload tidak akan mengubah state aplikasi, sedangkan Hot Restart tidak mempertahankan state aplikasi sehingga state akan hilang dan dimulai dari awal aplikasi
-    - Cara melakukan Hot Reload adalah dengan menggunakan tombol ctrl + \, sedangkan Hot Restart menggunakan tombol ctrl + shift + \
+    - Cara melakukan Hot Reload adalah dengan menggunakan tombol ctrl + \ . Sedangkan Hot Restart menggunakan tombol ctrl + shift + \
     - Hot Reload cocok digunakan saat mengubah tampilan UI, teks, layout dll, sedangkan Hot Restart digunakan saat mengubah struktur logika utama, variable global, atau konfigurasi awal
     - Hot Reload tidak akan menjalankan ulang apliksi, sedangkan Hot Restart akan menjalankan ulang aplikasi
 </details>
