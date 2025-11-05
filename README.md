@@ -105,5 +105,5 @@ c. State and Rebuild (Perubahan tampilan) -> Jika parent atau child mengalami pe
     - Hot Reload tidak akan mengubah state aplikasi, sedangkan Hot Restart tidak mempertahankan state aplikasi sehingga state akan hilang dan dimulai dari awal aplikasi
     - Cara melakukan Hot Reload adalah dengan menggunakan tombol ctrl + \ . Sedangkan Hot Restart menggunakan tombol ctrl + shift + \
     - Hot Reload cocok digunakan saat mengubah tampilan UI, teks, layout dll, sedangkan Hot Restart digunakan saat mengubah struktur logika utama, variable global, atau konfigurasi awal
-    - Hot Reload tidak akan menjalankan ulang apliksi, sedangkan Hot Restart akan menjalankan ulang aplikasi
+    - Hot Reload tidak akan menjalankan ulang aplikasi, sedangkan Hot Restart akan menjalankan ulang aplikasi
 </details>
