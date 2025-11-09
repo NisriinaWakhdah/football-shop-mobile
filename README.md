@@ -107,3 +107,11 @@ c. State and Rebuild (Perubahan tampilan) -> Jika parent atau child mengalami pe
     - Hot Reload cocok digunakan saat mengubah tampilan UI, teks, layout dll, sedangkan Hot Restart digunakan saat mengubah struktur logika utama, variable global, atau konfigurasi awal
     - Hot Reload tidak akan menjalankan ulang aplikasi, sedangkan Hot Restart akan menjalankan ulang aplikasi
 </details>
+
+<details>
+<Summary><b>TUGAS INDIVIDU 8</b></Summary>
+
+1. Navigator.push() digunakan, sedangkan Navigator.pushReplacement() digunakan
+
+2. 
+</details>
