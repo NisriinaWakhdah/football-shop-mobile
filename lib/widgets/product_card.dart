@@ -20,8 +20,8 @@ class ItemCard extends StatelessWidget{
             ..showSnackBar(SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!")));
           
           // Navigate ke route yang sesuai
-          if (item.name == "Create Product") {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => NewsFormPage()));
+          if (item.name == "Add Product") {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => ProductFormPage()));
           }
         },
         child: Container(
@@ -55,7 +55,7 @@ class ItemCard extends StatelessWidget{
         return Colors.blue;
       case "My Products":
         return Colors.green;
-      case "Create Product":
+      case "Add Product":
         return Colors.red;
       default:
         return Colors.tealAccent;

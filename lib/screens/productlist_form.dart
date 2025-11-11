@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:football_shop/widgets/left_drawer.dart';
 import 'package:intl/intl.dart';    // format angka
 
-class NewsFormPage extends StatefulWidget {
-  const NewsFormPage({super.key});
+class ProductFormPage extends StatefulWidget {
+  const ProductFormPage({super.key});
 
   @override
-  State<NewsFormPage> createState() => _NewsFormPageState();
+  State<ProductFormPage> createState() => _ProductFormPageState();
 }
 
-class _NewsFormPageState extends State<NewsFormPage> {
+class _ProductFormPageState extends State<ProductFormPage> {
   final _formKey = GlobalKey<FormState>();
   final _controller = TextEditingController();
   final NumberFormat currencyFormatter = NumberFormat.currency(
@@ -27,7 +27,7 @@ class _NewsFormPageState extends State<NewsFormPage> {
   String _size = "";
   int _stock = 0;
   bool _isFeatured = false;
-  int _viewers = 0;
+  final int _viewers = 0;
 
   final List<String> _categories = [
     'Perlengkapan Utama',
@@ -46,7 +46,7 @@ class _NewsFormPageState extends State<NewsFormPage> {
       appBar: AppBar(
         title: const Center(
           child: Text(
-            'Create Product Form',
+            'Add Product Form',
           ),
         ),
         backgroundColor: Color.fromARGB(255, 131, 151, 255),

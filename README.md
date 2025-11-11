@@ -111,7 +111,115 @@ c. State and Rebuild (Perubahan tampilan) -> Jika parent atau child mengalami pe
 <details>
 <Summary><b>TUGAS INDIVIDU 8</b></Summary>
 
-1. Navigator.push() digunakan, sedangkan Navigator.pushReplacement() digunakan
+1. Navigator.push() digunakan untuk menambahkan suatu route ke dalam stack route. Method ini membuat route yang ditambahkan berada pada bagian paling atas stack (LIFO), sehingga route tersebut akan muncul dan ditampilkan kepada penguna dan dengan menggunakan method ini, pengguna dapat menavigasi kembali ke halaman sebelumnya. Sedangkan Navigator.pushReplacement() digunakan untuk menggantikan atau menghapus rute yang sedang ditampilkan kepada pengguna atau rute lama dengan suatu rute baru di tumpukan navigasi sehingga pengguna tidak akan bisa menavigasi kembali ke rute atau halaman semula. Navigator.push() dapat digunakan saat pengguna berada di halaman All atau My Products, lalu menekan tombol Add Product dan setelah berhasil menambahkan produk, user bisa kembali ke halaman sebelumnya, yaitu halaman yang menampilkan produk. Sedangkan Navigator.pushReplacement() dapat digunakan saat user berada di halaman logout dan ketika berhasil logout, dia tidak bisa menekan tombol back untuk kembali ke halaman sebelumnya, misalnya halaman utama karena dia harus login terlebih dahulu  
 
-2. 
+2. Saya memanafaatkan hierarchy widget seperti Scaffold, AppBar, dan Drawer untuk membangun struktur halaman yang konsisten di seluruh aplikasi dengan menjadikan Scaffold sebagai kerangka utama (root) untuk setiap halaman agar memiliki tata letak yang sama. Di dalam Scaffold terdapat AppBar untuk menampilkan nama aplikasi, yaitu Football Shop serta Drawer di bagian kiri sebagai menu navigasi untuk memudahkan akses ke halaman lain
+
+3. Berikut ini merupakan kelebihan menggunakan layout widget seperti Padding, SingleChildScrollView, dan ListView beserta penggunaannya, yaitu:
+    - Padding: Menambahkan ruang di sekitar elemen sehingga dapat memberi jarak antar elemen agar tidak terlalu rapat dan membuat tempilan menjadi lebih rapih, contoh penggunannya adalah ketika membuat kolom input pada ProductFormPage, di mana untuk setiap input dibungkus dalam widget Padding agar terdapat jarak untuk setiap kolom input
+    <pre><code>
+    .....
+    child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+            // ==== INPUT NAMA PRODUK ====
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                        decoration: InputDecoration(
+                            hintText: "Nama Produk",
+                            labelText: "Nama Produk",
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                            ),
+                        ),
+                        onChanged: (String? value){
+                            setState(() {
+                                _name = value!;
+                            });
+                        },
+                        validator: (String? value){
+                            if (value == null || value.isEmpty){
+                                return "Silakan isi nama produk yang akan dijual";
+                            }
+                            return null;
+                        },
+                    ),
+            )
+            ......
+        ],
+    ),</code></pre>
+    - SingleChildScrollView: Membuat seluruh halaman bisa di-scroll secara vertikal atau horizontal dan hanya memiliki satu child di dalamnya. Widget ini dapat membantu untuk menghindari overflow ketika form panjang atau keyboard muncul serta cocok untuk form yang memiliki banyak field, contoh penggunaannya adalah ketika membuat form untuk menambahkan produk dan SingleChildScrollView digunakan untuk membungkus Column agar panjang form tidak menyababkan overflow saat layar kecil atau keyborad muncul
+    <pre><code>
+    .....
+    child: SingleChildScrollView(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: []
+                .....
+            )
+    )</code></pre>
+    - ListView: Menampilkan daftar elemen (widgets) yang dapat di-scroll secara vertikal maupun horizontal dan elemen di dalamnya disusun secara linear, mirip seperti Column hanya saja ListView bisa di-scroll secara langsung sedangkan Column tidak dapat di-scroll sehingga perlu dibungkus oleh widget lain, seperti SingleChildScrollView agar bisa di-scroll. Oleh karena itu, kelebihan dari ListView adalah dapat di-scroll otomatis tanpa membutuhkan pembungkus, mudah dikostumisasi, efisien untuk data besar, dan fleksibel. Contoh penggunaanya adalah ketika membuat sebuah Drawer yang berisi daftar navigasi ke halaman lain, seperti Halaman Utama dan halaman Tambah Produk
+    <pre><code>
+    .......
+    @override
+    Widget build(BuildContext context){
+        return Drawer(
+            child: ListView(
+                children: [
+                    const DrawerHeader(
+                        decoration: BoxDecoration(
+                            color: Colors.blue,
+                        ),
+                        child: Column(
+                            children: [
+                                Text(
+                                    'Football Shop',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                    ),
+                                ),
+                                Padding(padding: EdgeInsets.all(10)),
+                                    Text(
+                                        "Stay updated with the latest football products!",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.white,
+                                        ),
+                                ),
+                            ],
+                        ),
+                    ),
+                    ListTile(
+                        leading: const Icon(Icons.home_work_sharp),
+                        title: const Text('Halaman Utama'),
+                        onTap: () {
+                            Navigator.pushReplacement(
+                                context, 
+                                MaterialPageRoute(
+                                builder: (context) => MyHomePage(),
+                                ));
+                        },
+                    ),
+                    ListTile(
+                        leading: const Icon(Icons.post_add_rounded),
+                        title: const Text('Tambah Produk'),
+                        // bagian routing
+                        onTap: (){
+                            // routing ke NewsFormPage
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => ProductFormPage(),));
+                        }
+                    )
+                ],
+            ),
+        );
+    }
+    ...</code></pre>
+
+4. Cara saya menyesuaikan warna tema agar aplikasi Football Shop memiliki indentitas visual yang konsisten dengan brand toko adalah dengan mengatur properti theme pada MaterialApp menggunakan ThemeData dan ColorScheme sesuai warna brand sehingga seluruh tampilan aplikasi akan konsisten dengan identitas visual toko karena tidak perlu menetapkan warna secara manual pada setiap widget
 </details>
