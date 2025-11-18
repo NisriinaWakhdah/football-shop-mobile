@@ -223,3 +223,58 @@ c. State and Rebuild (Perubahan tampilan) -> Jika parent atau child mengalami pe
 
 4. Cara saya menyesuaikan warna tema agar aplikasi Football Shop memiliki indentitas visual yang konsisten dengan brand toko adalah dengan mengatur properti theme pada MaterialApp menggunakan ThemeData dan ColorScheme sesuai warna brand sehingga seluruh tampilan aplikasi akan konsisten dengan identitas visual toko karena tidak perlu menetapkan warna secara manual pada setiap widget
 </details>
+
+<details>
+<Summary><b>TUGAS INDIVIDU 9</b></Summary>
+
+1. Dalam mengambil/mengirim data JSON kita perlu membuat model Dartnya terlebih dahulu karena model Dart membuat struktur data yang jelas dan dapat diprediksi sehingga:
+    - Setiap field atau atributnya memiliki tipe data yang pasti sehingga dapat menghindari error apabila terdapat nilai yang tipenya tidak sesuai
+    - Dengan adanya model, kita bisa mengatur atribut mana yang wajib atau tidak boleh kosong dan mana atribut yang boleh null sehingga dapat mencegah error karena terdapat field yang kosong atau holang saat menerima JSON
+    - Model dapat membantu kita mengurangi typo dan error-runtime karena model mendukung fitur autocomplete dan pemeriksaan tipe data pada compile-time sehingga apabila terdapat typo bisa ketahuan sebelum run time
+    - Ketika API berubah, kita cukup memperbarui satu file model saja tanpa harus mencari perubahan di banyak tempat dan rawan bug
+    
+    Berikut ini adalah konsekuensinya apabila tidak menggunakan model:
+    - Tidak ada jaminan tipe data yang digunakan sehingga dapat menyebabkan runtime error apabila tipenya tidak sesuai
+    - Null safety tidak terjaga dengan baik sehingga apabila terdapat field yang kosong dapat menyebakan program nge-crash
+    - Tidak ada autocomplete sehingga apabila terdapat typo baru ketahuan saat runtime
+    - Ketika API berubah, kita harus mencari perubahannya di banyak tempat sehingga menyebabkan banyak file yang harus diedit
+
+2. Pada aplikasi flutter package http merupakan package standar untuk melakukan request HTTP sederhana seperti GET, POST, PUT, DELETE, mengirim dan menerima JSON sedangka CookieRequest merupakan kelas khusus dari package pbp_django_auth yang dibuat untuk menghubungkan Flutter dengan Django menggunakan cookies session dari Django sehingga dengan menggunakan CookieRequest aplikasi dapat mengenali siapa user yang sedang login saat ini. Berikut ini adalah perbedaannya:
+    - Package http berperan untuk mengirim request HTTP biasa tanpa harus autentikasi (user tidak perlu login) sedangkan CookieRequest berperan untuk mengirim request yang membawa identitas user sehingga Django mengetahui siapa yang sedang mengakses aplikasi
+    - Package http tidak menyimpan cookie sedangkan CookieRequest menyimpan cookie session Django setelah login
+    - Package http tidak bisa mengakses endpoint Django yang butuh autentikasi sedangkan CookieRequest bisa
+    - Package http bersifat stateles sedangkan CookieRequest bersifat statefull
+
+3. Seluruh komponen atau bagian dari aplikasi harus memakai instance CookieRequest agar semua halaman aplikasi mengenali user yang sedang login, semua request membawa cookie yang sama, tidak muncul konflik session, dan tidak. Oleh karena itu, agar seluruh halaman mengetahui status login yang sama, maka semua halaman harus memakai instance yang sama hal ini dikarenakan CookieRequest menyimpan state login dan cookie session Django
+
+4. 
+
+5. Berikut ini adalah mekasnisme atau alur pengiriman data higga dapat ditampilkan pada Flutter:
+    - User mengisi form atau menginput data pada Flutter
+    - Setelah user memasukkan input, Flutter akan membuat request berupa HTTP (POST, GET, DELETE, etc) atau CookieRequest apabila suatu fitur membutuhkan login yang akan dikirimkan ke Django
+    - Django menerima  request tersebut dan akan mengolah dan memvalidasi data lalu akan menyimpannya ke dalam databasee
+    - Setelah itu, Django akan mengirim respons balik ke Flutter dalam bentuk JSON
+    - Flutter menerima JSON yang dikirimkan dari Django dan apabila datanya kompleks, maka Flutter akan membuat model untuk memudahkan penggunaan data di UI
+    - Lalu, Flutter akan memperbarui state UI dan UI akan secara otomatis di-rebuild sehingga user dapat melihat output yang diinginkan
+
+6. Sebelum login, user yang tidak memiliki akun akan melakukan registrasi terlebih dahulu lalu dilanjutkan login dan logout, berikut ini adalah alurnya:
+    - User membuat akun terlebih dahulu (registrasi)
+        1. User mengisi form register di Flutter
+        2. Setelah selesai mengisi form tsb, Flutter melakukan request dengan mengirimkan data menggunakan HTTP POST ke Django 
+        3. Django menerima request tersebut dan melakukan validasi password serta username pada views.py, jika datanya valid maka Django akan membuat user baru
+        4. Setelah itu, Django akan mengirim respon dalam bentuk JSON ke flutter yang menyatakan bahwa user berhasil terdaftar
+        5. Flutter menerima data tersebut dan UI Flutter dapat menampilkan pesan, seperti "Registrasi berhasil"
+    - Setelah berhasi membuat akun, user melakukan input username dan password di halaman login Flutter
+    - Data input tesebut akan dikirimkan ke Django menggunakan CookieRequest (CookieRequest mengirim POST ke Django)
+    - Django menerima request tersebut dan akan melakukan validasi kredensial. Apabila data yang dikirimkan benar, maka Django akan membuat session baru, menyimpan session di database, dan mengirimkan cookie session via header
+    - Django akan mengirimkan cookie session ke Flutter
+    - Flutter menerima cookie session tersebut dan menganggap bahwa user berhasil login dan akan membuka halaman baru (ex: home)
+    - Karena user berhasil login, maka user dapat mengakses fitur yang membutuhkan login, misalnya logout
+    - Saat user memencet tombol logout, Flutter mengirim request logout menggunakan CookieRequest yang berisi cookie session ke Django
+    - Django menerima request tersebut dan akan menghapus session dari database serta mengirim cookie kosong ke Flutter
+    - Flutter menerimma respons dari Django dan CookieRequest akan otomatis menghaspus cookie session yang disimpan di dalam Flutter sehingga status autentikasi user sudah tidak valid lagi
+    - Setelah session hilang, seluruh request yang membutuhkan login tidak dapat diakses lagi oleh user sehingga Flutter akan mengarahkan user ke halaman Login atau halaman yang tidak membutuhkan login
+
+
+
+</details>

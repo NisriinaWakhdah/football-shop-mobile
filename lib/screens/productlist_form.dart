@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:football_shop/widgets/left_drawer.dart';
 import 'package:intl/intl.dart';    // format angka
+import 'dart:convert';
+import 'package:provider/provider.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:football_shop/screens/menu.dart';
 
 class ProductFormPage extends StatefulWidget {
   const ProductFormPage({super.key});
@@ -42,6 +46,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
         title: const Center(
@@ -317,11 +322,43 @@ class _ProductFormPageState extends State<ProductFormPage> {
                               actions: [
                                 TextButton(
                                   child: const Text('OK'),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    _formKey.currentState!.reset();
-                                    _controller.clear();
-                                    _price = 0;
+                                  onPressed: () async {
+                                    if (_formKey.currentState!.validate()) {
+                                     
+                                      final response = await request.postJson(
+                                        "http://localhost:8000/create-flutter/",
+                                        jsonEncode({
+                                          "name": _name,
+                                          "description": _description,
+                                          "price": _price,
+                                          "stock": _stock,
+                                          "size": _size,
+                                          "brand": _brand,
+                                          "category": _category,
+                                          "thumbnail": _thumbnail,
+                                          "is_featured": _isFeatured,
+                                          "product_viewers": _viewers,
+                                        }),
+                                      );
+                                      if (context.mounted) {
+                                        if (response['status'] == 'success') {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                            content: Text("Product successfully added!"),
+                                          ));
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => MyHomePage()),
+                                          );
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                            content: Text("Something went wrong, please try again."),
+                                          ));
+                                        }
+                                      }
+                                    }
                                   },
                                 ),
                               ],

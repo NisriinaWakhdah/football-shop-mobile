@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:football_shop/widgets/left_drawer.dart';
 import 'package:football_shop/widgets/product_card.dart';
+import 'package:provider/provider.dart';
+import 'package:football_shop/screens/login.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({super.key});
@@ -17,6 +20,7 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
+    final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
         title: RichText(
@@ -39,9 +43,38 @@ class MyHomePage extends StatelessWidget {
             ],
           ),
         ),
+        // Tombol logout
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: "Logout",
+            onPressed: () async {
+              final response = await request.logout(
+                "http://localhost:8000/auth/logout/",
+              );
+
+              if (response['status'] == true) {
+                // Logout sukses → kembali ke LoginPage
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  ),
+                );
+              } else {
+                // Logout gagal
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Logout gagal")),
+                );
+              }
+            },
+          ),
+        ],
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
+
       drawer: LeftDrawer(),   // menambahkan drawer yg telah dibuat
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
