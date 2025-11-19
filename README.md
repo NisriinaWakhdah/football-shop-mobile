@@ -261,8 +261,7 @@ c. State and Rebuild (Perubahan tampilan) -> Jika parent atau child mengalami pe
 
     Pada fitur yang berkaitan dengan autentikasi akun pengguna, seperti login ke Django menggunakan session cookie dari CookieRequest, perlu dilakukan penyesuaian konfigurasi pada Django karena pengaturan default cookie Django tidak mengizinkan penggunaan cookie secara cross-site. Secara default, Django menetapkan SameSite=Lax, yang berarti cookie tidak akan dikirim ketika request berasal dari aplikasi lain. Dengan mengatur SameSite/cookie, Django akan mengizinkan cookie untuk dapat digunakan secara cross origin sekaligus tetap menjaga keamanan melalui penggunaan cookie yang terenkripsi dan hanya dikirim melalui HTTPS. Jika konfigurasi ini tidak dilakukan, maka setiap request dari Flutter tidak akan membawa session cookie, sehingga Django selalu menganggap pengguna sebagai AnonymousUser akibatnya, fitur yang membutuhkan auntentikasi tidak dapat digunakan oleh user meskipun user berhasil login
 
-
-
+    Kita  juga perlu menambahkan izin akses internet di android karena secara default android tidak mengizinkan aplikasi mengakses intenet sehingga apabila perizinan tersebut tidak dilakukan dengan benar aplikasi Flutter tidak dapat membuka koneksi jaringan apa pun yang mengakibatkan tidak dapat terhubung dengan Django dan akan muncul error seperti “SocketException: Failed host lookup” ak
     
 5. Berikut ini adalah mekasnisme atau alur pengiriman data higga dapat ditampilkan pada Flutter:
     - User mengisi form atau menginput data pada Flutter
@@ -290,6 +289,17 @@ c. State and Rebuild (Perubahan tampilan) -> Jika parent atau child mengalami pe
     - Flutter menerimma respons dari Django dan CookieRequest akan otomatis menghaspus cookie session yang disimpan di dalam Flutter sehingga status autentikasi user sudah tidak valid lagi
     - Setelah session hilang, seluruh request yang membutuhkan login tidak dapat diakses lagi oleh user sehingga Flutter akan mengarahkan user ke halaman Login atau halaman yang tidak membutuhkan login
 
-
+7. Berikut ini adalahh cara saya mengimplementasikan checklist secara step-by-tep:
+    - Membuka proyek Django dan menambahkan modul autentikasi
+    - Melakukan routing pada proyek utama untuk memasukkan url yang berkaitan dengan modul authentication agar bisa diakses
+    - Pada modul autentikasi, saya membuat fungsi untuk melakukan login, logout, dan register
+    - Setelah membuat fungsi2 tsb di authentication/viesws.py saya membuat file urls.py di authentication dan melakukan routing untuk mengarahkan url dengan fungsi yang sudah didefinisikan
+    - Setelah itu, saya melakukan integrasi antara flutter dan django, seperti menambahkan "10.0.2.2" pada ALLOWED_HOST, mengaktifkan CORS, mengatur samesite dan cookieRequest, dan mengatur perizinan pada android
+    - Selanjutnya, saya mengintegrasikan autentiksi yang sudah dibuat pada Django ke Flutter dengan menambahkan CookieRequest request = CookieRequest(); pada file login.dart, memperbaiki file register.dart, dan menambahkan CookieRequest(); pada beberapa file berkaitan dengan beberapa fitur yang hanya bisa diakses ketika user sudah login 
+    - Membuat folder baru untuk model pada lib, lalu membuat model pada Flutter yang sudah dibuat di Django dengan menggunakan Quicktype
+    - Menambahkan dependensi HTTP pada Flutter agar bisa melakukan fungsi POST, DELETE dll seperti halnya yang dilakukan oleh Django
+    - Pada proyek Django di main/views.py, saya membuat beberapa fungsi yang berkaitan dengan flutter, seperti add_product_flutter, my_product_flutter, dan proxy_image lalu melakukan url routing pada main/urls.py
+    - Membuat file untuk menampilkan UI card product, detail product, file untuk menampilkan seluruh produk, dan file untuk menampilkan 'My Product'
+    -  Setelah itu, melakukan routing di Flutter menggunakan MatriealPageRoute agar saat cardnya dipencet bida redirect ke halaman yang sesuai
 
 </details>
