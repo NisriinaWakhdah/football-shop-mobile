@@ -5,18 +5,19 @@ import 'package:football_shop/screens/product_detail.dart';
 import 'package:football_shop/widgets/product_entry_card.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:football_shop/screens/my_product_detail.dart';
 
-class ProductEntryListPage extends StatefulWidget {
-  const ProductEntryListPage({super.key});
+class MyProductEntryListPage extends StatefulWidget {
+  const MyProductEntryListPage({super.key});
 
   @override
-  State<ProductEntryListPage> createState() => _ProductEntryListPageState();
+  State<MyProductEntryListPage> createState() => _MyProductEntryListPageState();
 }
 
-class _ProductEntryListPageState extends State<ProductEntryListPage> {
-  Future<List<ProductEntry>> fetchNews(CookieRequest request) async {
+class _MyProductEntryListPageState extends State<MyProductEntryListPage> {
+  Future<List<ProductEntry>> fetchMyProducts(CookieRequest request) async {
 
-    final response = await request.get('http://localhost:8000/json/');
+    final response = await request.get('http://localhost:8000/my-product/');
     
     // Decode response to json format
     var data = response;
@@ -36,11 +37,11 @@ class _ProductEntryListPageState extends State<ProductEntryListPage> {
     final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Product Entry List'),
+        title: const Text('My Product Entry List'),
       ),
       drawer: const LeftDrawer(),
       body: FutureBuilder(
-        future: fetchNews(request),
+        future: fetchMyProducts(request),
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.data == null) {
             return const Center(child: CircularProgressIndicator());
@@ -66,7 +67,7 @@ class _ProductEntryListPageState extends State<ProductEntryListPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ProductDetailPage(
+                        builder: (context) => MyProductDetailPage(
                           product: snapshot.data![index],
                         ),
                       ),

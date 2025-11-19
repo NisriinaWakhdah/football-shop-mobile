@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:football_shop/screens/my_product_entry_list.dart';
 import 'package:football_shop/screens/productlist_form.dart';
 import 'package:football_shop/screens/product_entry_list.dart';
 import 'package:football_shop/screens/menu.dart';
@@ -34,29 +35,14 @@ class ItemCard extends StatelessWidget{
                 builder: (context) => const ProductEntryListPage()
               ),
             );
-          }else if (item.name == "Logout") {
-            final response = await request.logout(
-                "http://localhost:8000/auth/logout/");
-            String message = response["message"];
-            if (context.mounted) {
-              if (response['status']) {
-                String uname = response["username"];
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text("$message See you again, $uname."),
-                ));
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
-                );
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(message),
-                  ),
-                );
-              }
-            }
-          }
+          }else if (item.name == "My Products") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MyProductEntryListPage()
+              ),
+            );
+          } 
         },
         child: Container(
           padding: const EdgeInsets.all(8),

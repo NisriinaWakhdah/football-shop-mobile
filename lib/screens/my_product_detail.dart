@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:football_shop/models/product_entry.dart';
 
-class ProductDetailPage extends StatelessWidget {
+class MyProductDetailPage extends StatelessWidget {
   final ProductEntry product;
 
-  const ProductDetailPage({super.key, required this.product});
+  const MyProductDetailPage({super.key, required this.product});
 
   String _formatDate(DateTime date) {
     final months = [
@@ -160,11 +160,6 @@ class ProductDetailPage extends StatelessWidget {
                   _infoRow(
                     icon: Icons.checkroom,
                     label: 'Brand: ${product.brand}',
-                  ),
-
-                  _infoRow(
-                    icon: Icons.sell_rounded, 
-                    label: 'Seller: ${product.userId}'
                   ),
 
                   const SizedBox(height: 20),

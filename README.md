@@ -247,8 +247,23 @@ c. State and Rebuild (Perubahan tampilan) -> Jika parent atau child mengalami pe
 
 3. Seluruh komponen atau bagian dari aplikasi harus memakai instance CookieRequest agar semua halaman aplikasi mengenali user yang sedang login, semua request membawa cookie yang sama, tidak muncul konflik session, dan tidak. Oleh karena itu, agar seluruh halaman mengetahui status login yang sama, maka semua halaman harus memakai instance yang sama hal ini dikarenakan CookieRequest menyimpan state login dan cookie session Django
 
-4. 
+4. Agar flutter dapat berkomunikasi dengan Django terdapat beberapa konfigurasi yang diperlukan, yaitu:
+    - Mengizinkan Host/Origin Flutter pada ALLOWED_HOSTS pada bagian settings.py project, hal ini dikarenakan Django hanya menerima request dari host yang terdaftar dan apabila origin flutter tidak dimasukkan, maka Django akan menolak request dan muncul error
+    - Mengaktifkan CORS (Cross-Origin Resource Sharing) karena Flutter dan Django berasal dari origin yang berbeda dan default dari Django adalah memblokir semua akses cross-origin.
+    - Konfigurasi Cookie untuk Login (SameSite, Secure) karena package pbp_django_auth mengandalkan session cookie untuk login, Django harus mengizinkan cookie cross-origin
+    - Menambahkan izin internet di android karena secara defaultnya aplikasi android tidak boleh menggunakan internet apabila kita tidak menambahkan izin tersebut, maka aplikasi tidak bisa terhubung dengan server
+    - Menambahkan CSRF Exempt untuk endpoint Flutter (POST login/register/create) hal ini dikarenakan agar POST dari Flutter tidak ditolak oleh browser. Selai itu, Flutter tidak memiliki CSRF token seperti browser sebagai gantinya adalah menggunakan @csrf_exempt
+    - Menambahkan 10.0.2.2 pada ALLOWED_HOSTS agara emulator bisa mengakses server laptop
 
+    10.0.2.2 perlu ditambahkan pada ALLOWED_HOSTS karena Flutter dan Django adalah dua aplikasi yang berjalan di lingkungan berbeda dan Django hanya menerima request dari host yang ada di ALLOWED_HOSTS, oleh karena itu, harus menambahkan ALLOWED_HOSTS = [...., "10.0.2.2"], alamat ini merupakan cara khusus emulator Android untuk mengakses localhost pada komputer host. Apabila tidak ditambahkan, maka Django akan langsung menolak request dari Flutter dan memghasilkan error DisallowedHost: Invalid HTTP_HOST header
+
+    CORS (Cross-Origin Resource Sharing) perlu diaktifkan karena Flutter dan Django berada pada origin yang berbeda, sehingga browser maupun framework jaringan akan memblokir request lintas domain secara otomatis. Dengan mengaktifkan CORS menggunakan CORS_ALLOW_ALL_ORIGINS dan CORS_ALLOW_CREDENTIALS, Django mengizinkan aplikasi Flutter melakukan request GET/POST tanpa diblokir oleh mekanisme keamanan CORS. Jika konfigurasi ini tidak diterapkan, Flutter akan menerima error “No 'Access-Control-Allow-Origin' header is present” dan komunikasi dengan Django tidak akan berhasil.
+
+    Pada fitur yang berkaitan dengan autentikasi akun pengguna, seperti login ke Django menggunakan session cookie dari CookieRequest, perlu dilakukan penyesuaian konfigurasi pada Django karena pengaturan default cookie Django tidak mengizinkan penggunaan cookie secara cross-site. Secara default, Django menetapkan SameSite=Lax, yang berarti cookie tidak akan dikirim ketika request berasal dari aplikasi lain. Dengan mengatur SameSite/cookie, Django akan mengizinkan cookie untuk dapat digunakan secara cross origin sekaligus tetap menjaga keamanan melalui penggunaan cookie yang terenkripsi dan hanya dikirim melalui HTTPS. Jika konfigurasi ini tidak dilakukan, maka setiap request dari Flutter tidak akan membawa session cookie, sehingga Django selalu menganggap pengguna sebagai AnonymousUser akibatnya, fitur yang membutuhkan auntentikasi tidak dapat digunakan oleh user meskipun user berhasil login
+
+
+
+    
 5. Berikut ini adalah mekasnisme atau alur pengiriman data higga dapat ditampilkan pada Flutter:
     - User mengisi form atau menginput data pada Flutter
     - Setelah user memasukkan input, Flutter akan membuat request berupa HTTP (POST, GET, DELETE, etc) atau CookieRequest apabila suatu fitur membutuhkan login yang akan dikirimkan ke Django
